@@ -1,0 +1,22 @@
+// ======================================================== //
+// =========         METODO BURBUJA               ========= //
+// =========Johan Quebrada - Lina Montes          ========= //
+// ======================================================== //
+
+* La aplicacion recibe un archivo de texto con numeros a ordenar por metodo burbuja.
+* En la primera posicion tomara la cantidad de items del arreglo a procesar.
+* Las siguientes lineas seran los items a ordenar segun la cantidad.
+	** Si la cantidad de números es mayor o menor al tamaño del arreglo, serán omitidos.
+Ejemplo:
+5 -> Tamaño del arreglo
+1 -> item a ordenar
+4 -> item a ordenar
+2 -> item a ordenar
+6 -> item a ordenar
+5 -> item a ordenar
+85 -> item omitido
+58 -> item omitido
+
+
+Anexo: La variable del tiempo esta seteada en la consola del navegador, para abrir la
+       consola presione F12.

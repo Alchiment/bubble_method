@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Metodo burbuja</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6">
+				<h1 align="center">Selección de archivo</h1>
+				<form action="#" method="POST">
+					<div class="form-group">
+						<label for="exampleInputFile">Carga de Archivo</label>
+						<input type="file" id="uplo" name="uplo">
+						<p class="help-block">Seleccione el archivo a procesar.</p>
+					</div>
+					<button id="button_ini" class="btn btn-success" disabled >Generar</button>
+				</form>
+			</div>
+			<div class="col-md-6">
+				<h1 align="center">Impresión</h1>
+				<span id="wr_time" style="display:none">Tiempo de ejecución: <strong id="time"></strong> ms</span>
+				<div id="resul"></div>
+				<div>
+					<ul id="list_arreglos"></ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+	$(function(){
+		//Si el navegador soporta el API FileReader
+		if(typeof window.FileReader != 'undefined'){
+
+			var arreglo;
+			// ===== Procesamiento del archivo .TXT =====
+			function processFile(files){
+				// ===== Extrae el archivo almacenado =====
+				var file = files[0];
+				// ===== Instancia de la API =====
+				var reader = new FileReader();
+				// ===== Seteo del documento almacenado luego de haber subido =====
+				reader.onload = function(e){
+					arreglo = e.target.result;
+				}
+				// ===== Apertura del archivo =====
+				reader.readAsText(file);
+				// ===== Retarda 500 milisegundos para comenzar a procesar el archivo =====
+				setTimeout(function(){
+					procedimiento(arreglo.split(/\r\n|\n|\r/).map(Number));
+				}, 500);
+			}
+			// ===== Control del boton Generar mientras sube el archivo =====
+			$('#uplo').change(function(){
+				if(typeof this.files[0] != 'undefined')
+					$('#button_ini').removeAttr('disabled');
+				else
+					$('#button_ini').attr('disabled', true);
+			});
+			// ===== Boton que lanza la ejeucion =====
+			$('#button_ini').click(function(e){
+				e.preventDefault();
+				var files = document.querySelector('#uplo').files;
+				processFile(files);
+			})
+
+			// Metodo burbuja
+			// ====================
+			// == Archivo .txt ==/
+			// === En la primer linea indica la cantidad del arreglo ==/
+			// === que va a recorrer  ==/
+			// ====================
+
+			function procedimiento(arregl){
+				var arr = arregl;
+				// ===== Variables auxiliares =====
+				var aux = 0, cont = 0, inter = 0;
+				// ===== Control de cambios =====
+				var cambios = false;
+				// ===== Impresion del arreglo sin cambios =====
+				console.log(arr, 'arreglo 1');
+				// ===== Extrae la cantidad del arreglo a recorrer =====
+				var length = arr[0];
+				// ===== Elimina el indicador de tamaño (primera linea) =====
+					arr = arr.splice(1, length);
+				// ===== Impresion del arreglo a procesar (con cambios) =====
+				console.log(arr, 'arreglo 1.1');
+				// ===== Impresion de la cantidad a procesar (indicador de tamaño) =====
+				console.log(length, 'length 1');
+				// ===== Inicio de tiempo de ejecucion =====
+				var startTime = new Date().getTime();
+				var msj = '';
+				while(true){
+					cambios = false;
+					for (var i = 1; i < arr.length; i++) {
+						cont++;
+						if (arr[i] < arr[i-1]) {
+							aux = arr[i-1];
+							arr[i-1] = arr[i];
+							arr[i] = aux; 
+							inter++;
+							cambios = true;
+						};
+					};
+					msj += '<li>'+arr+' - '+inter+' intercambios '+cont+' comparaciones'+'</li>';
+					console.log(arr, 'arreglo 2 - ' +inter+' intercambios', cont+' comparaciones');
+					if(cambios == false)
+						break;
+
+				}
+
+				$('#list_arreglos').html(msj);
+				// ===== Finalizacion del tiempo de ejecucion =====
+				var endTime = new Date().getTime();
+				// Impresion del tiempo
+				$('#time').html(endTime - startTime);
+				$('#wr_time').show();
+			}
+		}else{
+			// ===== Mensaje en caso de no soportar la API =====
+			alert('El navegador debe soportar la API FileReader para trabajar - actualiza el navegador');
+		}
+	});
+</script>
+</html>
